@@ -4,10 +4,15 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Student
 from .serializers import StudentSerializer
-
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import AllowAny,IsAdminUser,IsAuthenticated,IsAuthenticatedOrReadOnly,DjangoModelPermissions,DjangoModelPermissionsOrAnonReadOnly
+from .custompermission import IsStudent
 class StudentViewSet(viewsets.ViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    authentication_classes = [SessionAuthentication]
+    permission_classes=[IsStudent]
+
 
     def get_object(self, pk):
         return get_object_or_404(Student, pk=pk)
